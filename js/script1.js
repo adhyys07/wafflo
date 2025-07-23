@@ -28,37 +28,29 @@ class MP3Player {
     }
     
     initializeEventListeners() {
-        // Play/Pause button
         this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
         
-        // Previous/Next buttons
         this.prevBtn.addEventListener('click', () => this.previousSong());
         this.nextBtn.addEventListener('click', () => this.nextSong());
         
-        // File input
         this.fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
         
-        // Volume control
         this.volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value));
         
-        // Favourite picks button
         this.favouritePicksBtn.addEventListener('click', () => this.toggleFavouritePicks());
         
-        // Progress bar
         this.progressBar.addEventListener('mousedown', (e) => this.startDragging(e));
         this.progressBar.addEventListener('click', (e) => this.setProgress(e));
         
         document.addEventListener('mousemove', (e) => this.handleDragging(e));
         document.addEventListener('mouseup', () => this.stopDragging());
         
-        // Audio events
         this.audio.addEventListener('loadedmetadata', () => this.updateDuration());
         this.audio.addEventListener('timeupdate', () => this.updateProgress());
         this.audio.addEventListener('ended', () => this.nextSong());
         this.audio.addEventListener('loadstart', () => this.showLoading());
         this.audio.addEventListener('canplay', () => this.hideLoading());
-        
-        // Keyboard shortcuts
+ 
         document.addEventListener('keydown', (e) => this.handleKeyboard(e));
     }
     
@@ -93,10 +85,8 @@ class MP3Player {
         this.audio.src = song.url;
         this.songTitle.textContent = song.name;
         
-        // Update active playlist item
         this.updateActivePlaylistItem(index);
         
-        // Reset progress
         this.progress.style.width = '0%';
         this.currentTimeEl.textContent = '0:00';
     }
@@ -231,7 +221,7 @@ class MP3Player {
             this.playlistItems.appendChild(li);
         });
         
-        // If no songs, show a message
+    
         if (songsToShow.length === 0) {
             const li = document.createElement('li');
             li.textContent = this.showingFavourites ? 'No favourite songs yet.' : 'No songs in playlist.';
@@ -262,7 +252,7 @@ class MP3Player {
         if (existingIndex > -1) {
             this.favourites.splice(existingIndex, 1);
         } else {
-            this.favourites.push({ name: song.name }); // Only store the name
+            this.favourites.push({ name: song.name }); 
         }
         localStorage.setItem('favouriteSongs', JSON.stringify(this.favourites));
         this.updatePlaylist();
@@ -288,15 +278,12 @@ class MP3Player {
     }
     
     showLoading() {
-        // Do not overwrite the song title with 'Loading...'
     }
     
     hideLoading() {
-        // Loading complete - metadata should be updated
     }
     
     handleKeyboard(event) {
-        // Prevent conflicts when typing in input fields
         if (event.target.tagName === 'INPUT') return;
         
         switch(event.code) {
@@ -324,12 +311,10 @@ class MP3Player {
     }
 }
 
-// Initialize the MP3 player when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     window.player = new MP3Player();
 });
 
-// Add some utility functions for enhanced functionality
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -338,7 +323,6 @@ function shuffleArray(array) {
     return array;
 }
 
-// Add service worker registration for PWA capabilities (optional)
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
@@ -351,7 +335,6 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Update song title when a file is selected
 function updateSongInfo(fileName) {
     document.getElementById('songTitle').textContent = fileName;
 }
