@@ -18,7 +18,6 @@
     </div>
     <script src="../js/script1.js"></script>
     <script>
-        // Load favourite songs from localStorage
         const favouriteSongs = JSON.parse(localStorage.getItem('favouriteSongs')) || [];
         const favouriteSongsList = document.querySelector('.favourite-songs');
 
@@ -27,7 +26,7 @@
         } else {
             favouriteSongs.forEach(song => {
                 const li = document.createElement('li');
-                li.textContent = song.title; // Ensure the title property is accessed correctly
+                li.textContent = song.name || song;
                 favouriteSongsList.appendChild(li);
             });
         }

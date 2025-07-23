@@ -25,7 +25,6 @@
             
             <div class="song-info">
                 <h2 id="songTitle">No Song Selected</h2>
-                <p id="artist">Unknown Artist</p>
             </div>
             
             <div class="progress-container">
@@ -70,8 +69,8 @@
             const currentSong = document.getElementById('songTitle').textContent;
             const favouriteSongs = JSON.parse(localStorage.getItem('favouriteSongs')) || [];
 
-            if (currentSong && !favouriteSongs.some(song => song.title === currentSong)) {
-                favouriteSongs.push({ title: currentSong });
+            if (currentSong && !favouriteSongs.includes(currentSong)) {
+                favouriteSongs.push(currentSong); 
                 localStorage.setItem('favouriteSongs', JSON.stringify(favouriteSongs));
             }
         });
@@ -81,8 +80,8 @@
                 const songName = event.target.closest('li').querySelector('.song-name').textContent;
                 const favouriteSongs = JSON.parse(localStorage.getItem('favouriteSongs')) || [];
 
-                if (songName && !favouriteSongs.some(song => song.title === songName)) {
-                    favouriteSongs.push({ title: songName });
+                if (songName && !favouriteSongs.includes(songName)) {
+                    favouriteSongs.push(songName); 
                     localStorage.setItem('favouriteSongs', JSON.stringify(favouriteSongs));
                 }
             });

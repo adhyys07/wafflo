@@ -92,10 +92,6 @@ class MP3Player {
         const song = this.playlist[index];
         this.audio.src = song.url;
         this.songTitle.textContent = song.name;
-        this.artist.textContent = song.artist;
-        
-        // Extract metadata if available
-        this.extractMetadata(song.file);
         
         // Update active playlist item
         this.updateActivePlaylistItem(index);
@@ -103,20 +99,6 @@ class MP3Player {
         // Reset progress
         this.progress.style.width = '0%';
         this.currentTimeEl.textContent = '0:00';
-    }
-    
-    extractMetadata(file) {
-        // Simple metadata extraction - in a real app, you'd use a library like jsmediatags
-        const fileName = file.name;
-        const parts = fileName.replace(/\.(mp3|mpeg)$/i, '').split(' - ');
-        
-        if (parts.length >= 2) {
-            this.artist.textContent = parts[0].trim();
-            this.songTitle.textContent = parts.slice(1).join(' - ').trim();
-        } else {
-            this.songTitle.textContent = parts[0].trim();
-            this.artist.textContent = 'Unknown Artist';
-        }
     }
     
     togglePlayPause() {
@@ -230,7 +212,7 @@ class MP3Player {
         songsToShow.forEach((song, index) => {
             const li = document.createElement('li');
             li.innerHTML = `
-                <span>${song.artist} - ${song.name}</span>
+                <span class="song-name">${song.name}</span>
                 <div class="song-actions">
                     <button class="heart-btn ${this.isFavourite(song) ? 'active' : ''}" onclick="player.toggleFavourite(${this.showingFavourites ? this.getOriginalIndex(song) : index})">
                         <i class="fas fa-heart"></i>
@@ -248,6 +230,14 @@ class MP3Player {
             });
             this.playlistItems.appendChild(li);
         });
+        
+        // If no songs, show a message
+        if (songsToShow.length === 0) {
+            const li = document.createElement('li');
+            li.textContent = this.showingFavourites ? 'No favourite songs yet.' : 'No songs in playlist.';
+            li.style.color = '#00ff41';
+            this.playlistItems.appendChild(li);
+        }
         
         this.updateActivePlaylistItem(this.currentSongIndex);
     }
@@ -268,30 +258,22 @@ class MP3Player {
     
     toggleFavourite(songIndex) {
         const song = this.playlist[songIndex];
-        const existingIndex = this.favourites.findIndex(fav => 
-            fav.name === song.name && fav.artist === song.artist
-        );
-        
+        const existingIndex = this.favourites.findIndex(fav => fav.name === song.name);
         if (existingIndex > -1) {
             this.favourites.splice(existingIndex, 1);
         } else {
-            this.favourites.push({...song});
+            this.favourites.push({ name: song.name }); // Only store the name
         }
-        
         localStorage.setItem('favouriteSongs', JSON.stringify(this.favourites));
         this.updatePlaylist();
     }
     
     isFavourite(song) {
-        return this.favourites.some(fav => 
-            fav.name === song.name && fav.artist === song.artist
-        );
+        return this.favourites.some(fav => fav.name === song.name);
     }
     
     getOriginalIndex(song) {
-        return this.playlist.findIndex(playlistSong => 
-            playlistSong.name === song.name && playlistSong.artist === song.artist
-        );
+        return this.playlist.findIndex(playlistSong => playlistSong.name === song.name);
     }
     
     updateActivePlaylistItem(activeIndex) {
@@ -306,7 +288,7 @@ class MP3Player {
     }
     
     showLoading() {
-        this.songTitle.textContent = 'Loading...';
+        // Do not overwrite the song title with 'Loading...'
     }
     
     hideLoading() {
@@ -368,3 +350,16 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// Update song title when a file is selected
+function updateSongInfo(fileName) {
+    document.getElementById('songTitle').textContent = fileName;
+}
+
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    const files = event.target.files;
+    if (files.length > 0) {
+        const fileName = files[0].name;
+        updateSongInfo(fileName);
+    }
+});
