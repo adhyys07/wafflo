@@ -75,20 +75,23 @@ class MP3Player {
             this.currentSongIndex = 0;
             this.loadSong(this.currentSongIndex);
             this.updatePlaylist();
+        } else {
+            setAlbumArtRotation(false);
         }
     }
     
     loadSong(index) {
-        if (index < 0 || index >= this.playlist.length) return;
-        
+        if (index < 0 || index >= this.playlist.length) {
+            setAlbumArtRotation(false);
+            return;
+        }
         const song = this.playlist[index];
         this.audio.src = song.url;
         this.songTitle.textContent = song.name;
-        
         this.updateActivePlaylistItem(index);
-        
         this.progress.style.width = '0%';
         this.currentTimeEl.textContent = '0:00';
+        setAlbumArtRotation(false);
     }
     
     togglePlayPause() {
@@ -311,8 +314,62 @@ class MP3Player {
     }
 }
 
+function highlightSongTitle() {
+    const title = document.getElementById('songTitle');
+    title.style.background = '#00ff41';
+    title.style.color = '#000';
+    setTimeout(() => {
+        title.style.background = '';
+        title.style.color = '';
+    }, 1000);
+}
+document.getElementById('songTitle').addEventListener('click', highlightSongTitle);
+
+function togglePlaylist() {
+    const playlist = document.getElementById('playlist');
+    if (playlist.style.display === 'none') {
+        playlist.style.display = '';
+    } else {
+        playlist.style.display = 'none';
+    }
+}
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'p' || e.key === 'P') {
+        togglePlaylist();
+    }
+});
+
+function changePlayerBorderColor() {
+    const player = document.querySelector('.music-player');
+    const colors = ['#00ff00', '#ff0080', '#ffcc00', '#00ccff'];
+    const current = player.style.borderColor;
+    let next = colors[(colors.indexOf(current) + 1) % colors.length];
+    if (!colors.includes(current)) next = colors[0];
+    player.style.borderColor = next;
+}
+document.querySelector('.music-player').addEventListener('dblclick', changePlayerBorderColor);
+
+function setAlbumArtRotation(isPlaying) {
+    const albumArt = document.querySelector('.album-art');
+    if (!albumArt) return;
+    albumArt.classList.add('rotate-art');
+    albumArt.style.animationPlayState = isPlaying ? 'running' : 'paused';
+}
+
+const originalPlay = MP3Player.prototype.play;
+MP3Player.prototype.play = function() {
+    originalPlay.call(this);
+    setAlbumArtRotation(true);
+};
+const originalPause = MP3Player.prototype.pause;
+MP3Player.prototype.pause = function() {
+    originalPause.call(this);
+    setAlbumArtRotation(false);
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     window.player = new MP3Player();
+    setAlbumArtRotation(false);
 });
 
 function shuffleArray(array) {
@@ -346,3 +403,37 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         updateSongInfo(fileName);
     }
 });
+
+function createVolumeBar() {
+    const volumeContainer = document.querySelector('.volume-container');
+    if (!volumeContainer) return;
+    const oldSlider = document.getElementById('volumeSlider');
+    if (oldSlider) oldSlider.remove();
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.id = 'volumeSlider';
+    slider.min = '0';
+    slider.max = '100';
+    slider.value = '50';
+    slider.className = 'volume-slider';
+    slider.style.height = '8px';
+    slider.style.background = '#333';
+    slider.style.border = '2px solid #fff';
+    slider.style.boxShadow = 'inset 2px 2px 0 #000';
+    slider.style.width = '100%';
+    slider.style.margin = '0 10px';
+    volumeContainer.insertBefore(slider, volumeContainer.children[1]);
+    slider.addEventListener('input', function(e) {
+        window.player.setVolume(e.target.value);
+    });
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('modeToggleBtn');
+    if (btn) btn.onclick = toggleMode;
+});
+function toggleMode() {
+    document.documentElement.classList.toggle('light-mode');
+}
+
+
+document.addEventListener('DOMContentLoaded', createVolumeBar);

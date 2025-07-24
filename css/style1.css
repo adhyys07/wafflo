@@ -1,3 +1,41 @@
+.light-mode .fa-volume-down,
+.light-mode .fa-volume-up {
+    color: #222;
+}
+.light-mode #currentTime,
+.light-mode #duration {
+    color: #222;
+}
+.mode-toggle-btn {
+    background: #222;
+    color: #ffcc00;
+    border: 2px solid #ffcc00;
+    border-radius: 0;
+    padding: 8px 18px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0 0 #000;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.mode-toggle-btn:hover {
+    background: #ffcc00;
+    color: #222;
+    box-shadow: 3px 3px 0 0 #000;
+}
+.light-mode .mode-toggle-btn {
+    background: #ffcc00;
+    color: #222;
+    border-color: #222;
+    box-shadow: 2px 2px 0 0 #ccc;
+}
+.light-mode .mode-toggle-btn:hover {
+    background: #222;
+    color: #ffcc00;
+    box-shadow: 3px 3px 0 0 #ccc;
+}
 * {
     margin: 0;
     padding: 0;
@@ -477,6 +515,116 @@ body {
     border-color: #ff0080;
 }
 
+/* Light Mode Theme */
+.light-mode body {
+    background: #f5f5f5;
+    color: #222;
+}
+.light-mode .music-player {
+    background-color: #fff;
+    border-color: #222;
+    box-shadow: 0 0 0 2px #ccc, 0 0 0 4px #222, 10px 10px 0 0 #ccc, 10px 10px 0 2px #222;
+}
+.light-mode .player-header h1 {
+    color: #222;
+    text-shadow: 2px 2px 0 #eee;
+}
+.light-mode .album-art {
+    background: #eee;
+    border-color: #222;
+    box-shadow: 0 0 0 2px #ccc, 0 0 0 4px #222, 4px 4px 0 0 #ccc;
+}
+.light-mode .album-art::before {
+    background: repeating-linear-gradient(45deg, #222 0px, #222 10px, #eee 10px, #eee 20px);
+}
+.light-mode .album-art::after {
+    background: repeating-linear-gradient(45deg, #ffcc00 0px, #ffcc00 10px, #eee 10px, #eee 20px);
+}
+.light-mode .song-info h2 {
+    color: #222;
+    text-shadow: 1px 1px 0 #eee;
+}
+.light-mode .song-info p {
+    color: #ff0080;
+    text-shadow: 2px 2px 0 #eee;
+}
+.light-mode .progress-bar {
+    background: #eee;
+    border-color: #222;
+    box-shadow: inset 2px 2px 0 #ccc;
+}
+.light-mode .progress {
+    background: repeating-linear-gradient(90deg, #ffcc00 0px, #ffcc00 4px, #ff0080 4px, #ff0080 8px);
+}
+.light-mode .control-btn {
+    background: #eee;
+    color: #222;
+    border-color: #222;
+    box-shadow: 2px 2px 0 0 #ccc;
+}
+.light-mode .control-btn:hover {
+    background: #222;
+    color: #eee;
+    box-shadow: 3px 3px 0 0 #ccc;
+}
+.light-mode .play-pause {
+    background: #ffcc00;
+    color: #222;
+    border-color: #222;
+}
+.light-mode .play-pause:hover {
+    background: #222;
+    color: #ffcc00;
+}
+.light-mode .playlist li {
+    background: #eee;
+    color: #222;
+    border-color: #ccc;
+    box-shadow: 1px 1px 0 0 #ccc;
+}
+.light-mode .playlist li.active {
+    background: #ffcc00;
+    color: #222;
+    border-color: #222;
+    box-shadow: 2px 2px 0 0 #ccc;
+}
+.light-mode .heart-btn {
+    background: #eee;
+    color: #222;
+    border-color: #ccc;
+    box-shadow: 1px 1px 0 0 #ccc;
+}
+.light-mode .heart-btn.active {
+    background: #ff0080;
+    color: #fff;
+    border-color: #222;
+}
+.light-mode .file-input-label {
+    background: #ffcc00;
+    color: #222;
+    border-color: #222;
+    box-shadow: 2px 2px 0 0 #ccc;
+}
+.light-mode .file-input-label:hover {
+    background: #222;
+    color: #ffcc00;
+    box-shadow: 3px 3px 0 0 #ccc;
+}
+.light-mode .volume-slider {
+    background: #eee;
+    border-color: #222;
+    box-shadow: inset 2px 2px 0 #ccc;
+}
+.light-mode .volume-slider::-webkit-slider-thumb {
+    background: #ffcc00;
+    border-color: #222;
+    box-shadow: 1px 1px 0 #ccc;
+}
+.light-mode .volume-slider::-moz-range-thumb {
+    background: #ffcc00;
+    border-color: #222;
+    box-shadow: 1px 1px 0 #ccc;
+}
 /* Responsive Design */
 @media (max-width: 480px) {
     .music-player {
